@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 
 """pcap2csv
 Script to extract specific pieces of information from a pcap file and
@@ -171,3 +171,4 @@ def main():
 if __name__ == '__main__':
     main()
 # 이주현!
+# 김지혜!
