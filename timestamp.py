@@ -6,7 +6,7 @@ import csv
 import collections
 from pandas import DataFrame as df
 
-data = pd.read_csv("./test_younggil.csv", sep='|', dtype='unicode',
+data = pd.read_csv("./dataset/test_younggil.csv", sep='|', dtype='unicode',
                    names=['no', 'time', 'protocol', 'text description', 'srcip', 'dstip', 'total pkt length',
                           'L4 payload hexdump'])  # 'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
 data['time'] = data['time'].astype('float')
@@ -33,12 +33,12 @@ new_data = pd.concat([new_data, IP_PORT], axis=1)
 
 # timestamp에 각 초에 따른 데이터를 넣어줌
 timestamp_IP_PORT = []
-for i in range((max(new_data['TIME']))):
+for i in range((max(new_data['TIME'])+1)):
     line = []
     timestamp_IP_PORT.append(line)
 
 for j in range(len(new_data['TIME'])):
-    timestamp_IP_PORT[new_data['TIME'].iloc[j] - 1].append(new_data['IP_PORT'].iloc[j])
+    timestamp_IP_PORT[new_data['TIME'].iloc[j]].append(new_data['IP_PORT'].iloc[j])
 
 # timestamp를 이용해서 counter에 각 초당 IP&PORT 개수를 저장함
 counter_IP_PORT = []
@@ -69,7 +69,7 @@ for k in range(len(timestamp_IP)):
 
 timestamp_PORT = []
 # 초단위로 바꾼 값 중의 최대값 크기만큼의 (timestamp)리스트를 만듦
-for i in range((max(new_data['TIME']))):
+for i in range((max(new_data['TIME']))+1):
     line = []
     timestamp_PORT.append(line)
 
@@ -77,26 +77,15 @@ for i in range((max(new_data['TIME']))):
 # 아래 코드 실행 후 timestamp[0:2] 로 출력하면 0초,1초에 대한 dstip 출력
 for j in range(len(new_data['TIME'])):
     # print(data['time'].iloc[j])
-    timestamp_PORT[new_data['TIME'].iloc[j] - 1].append(new_data['PORT'].iloc[j])
+    timestamp_PORT[new_data['TIME'].iloc[j]].append(new_data['PORT'].iloc[j])
 
 counter_PORT = []
 for k in range(len(timestamp_PORT)):
     counter_PORT.append(collections.Counter(timestamp_PORT[k]))
 
-print "TIMESTAMP_IP : "
-print timestamp_IP
-print "TIMESTAMP_PORT : "
-print timestamp_PORT
-print "TIMESTAMP_IP_PORT : "
-print timestamp_IP_PORT
-print "COUNTER_IP : "
-print counter_IP
-print "COUNTER_PORT : "
-print counter_PORT
-print "COUNTER_IP_PORT : "
-print counter_IP_PORT
 
-
+print("counter_IP_PORT")
+print (counter_IP_PORT)
 
 
 # timestamp_IP -> 초 단위로 IP를 자름
