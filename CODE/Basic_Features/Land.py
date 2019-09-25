@@ -5,9 +5,7 @@ import csv
 import collections
 from pandas import DataFrame as df
 f = open("./result.txt","w")
-data = pd.read_csv("./test_younggil.csv", sep='|', dtype='unicode',
-                   names=['no', 'time', 'protocol', 'text description', 'srcip', 'dstip', 'total pkt length',
-                          'L4 payload hexdump'])  # 'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
+data = pd.read_csv("../../dataset/test_younggil.csv", sep='|', dtype='unicode', names=['no', 'time', 'protocol', 'text description', 'srcip', 'dstip', 'total pkt length', 'L4 payload hexdump'])  # 'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
 data['time'] = data['time'].astype('float')
 data['TIME'] = data['time'].astype('int')
 
@@ -101,15 +99,22 @@ for k in range(len(timestamp_PORT)):
     counter_PORT.append(collections.Counter(timestamp_PORT[k]))
 
 print(new_data)
-#print( "COUNTER_IP_PORT : ")
-#print (counter_IP_PORT)
+print(land)
 
 
-# timestamp_IP -> 초 단위로 IP를 자름
-# timestamp_PORT -> 초 단위로 PORT를 자름
-# timestamp_IP_PORT -> 초 단위로 IP_PORT를 자름
+
+##print( "COUNTER_IP_PORT : ")
+##print (counter_IP_PORT)
 #
 #
-# counter_IP -> 초 단위로 잘린 IP의 개수를 반환
-# counter_PORT -> 초 단위로 잘린 IP의 개수를 반환
-# counter_IP_PORT -> 초 단위로 잘린 IP의 개수를 반환
+## timestamp_IP -> 초 단위로 IP를 자름
+## timestamp_PORT -> 초 단위로 PORT를 자름
+## timestamp_IP_PORT -> 초 단위로 IP_PORT를 자름
+##
+##
+## counter_IP -> 초 단위로 잘린 IP의 개수를 반환
+## counter_PORT -> 초 단위로 잘린 IP의 개수를 반환
+## counter_IP_PORT -> 초 단위로 잘린 IP의 개수를 반환
+#
+if __name__ == '__main__':
+    pass
