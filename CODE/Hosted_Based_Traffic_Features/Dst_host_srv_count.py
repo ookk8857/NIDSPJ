@@ -18,4 +18,3 @@ def Dst_host_srv_count(target):
     counter_Port=collections.Counter(split["dstPort"]) #같은 목적지 port 개수
     counter_Port_list = [(k,counter_Port[k]) for k in counter_Port]
     display(pd.DataFrame(counter_Port_list, columns=['dst_Port','Dst_host_srv_count']))
-Dst_host_srv_count("test_younggil.csv")

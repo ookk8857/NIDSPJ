@@ -10,7 +10,7 @@ import collections
 from pandas import DataFrame as df
 
 
-def Dst_host_same_src_port_rate(target):
+def Dst_host_same_src_port_rate(target): #csv파일이 있는 위치를 target으로!
 
     
     new_data = pd.read_csv(target, sep='|', dtype = 'unicode', names = ['no','time','protocol','text description','srcip','dstip','total pkt length','L4 payload hexdump'])#'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
@@ -63,4 +63,3 @@ def Dst_host_same_src_port_rate(target):
     rate_result = pd.concat([rate_result, result['dport']], axis=1)
     print(rate_result)
     
-Dst_host_same_src_port_rate("dataset/test_younggil.csv")

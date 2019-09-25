@@ -13,7 +13,7 @@ from pandas import DataFrame as df
 
 def Dst_host_same_srv_rate(target):
     
-    data = pd.read_csv("dataset/test_younggil.csv", sep='|', dtype = 'unicode', names = ['no','time','protocol','text description','srcip','dstip','total pkt length','L4 payload hexdump'])#'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
+    data = pd.read_csv(target, sep='|', dtype = 'unicode', names = ['no','time','protocol','text description','srcip','dstip','total pkt length','L4 payload hexdump'])#'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
     counter_same_src = collections.Counter(data['dstip'])
     data
     new_data = data['dstip']#IP랑 Port 묶여있음
@@ -52,4 +52,3 @@ def Dst_host_same_srv_rate(target):
     # print(result)
     rate_result = result["IP_PORT_COUNT"]/result["IP_COUNT"]
     print(rate_result)
-Dst_host_same_srv_rate("dataset/test_younggil.csv")
