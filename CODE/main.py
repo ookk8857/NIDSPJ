@@ -16,27 +16,64 @@ def make_new_data(data):
     data['time'] = data['time'].astype('float')
     data['TIME'] = data['time'].astype('int')
     
-    # IP, PORT, IP_PORT 데이터셋 생성 -> new_data
-    new_data = data['dstip']
-    new_data = pd.DataFrame(new_data)
-    IP = []
-    PORT = []
-    dst = []
-    for i in range(len(new_data)):
-        IP.append(new_data.iloc[i][0].split(':')[0])
-        PORT.append(new_data.iloc[i][0].split(':')[1])
+#    # IP, PORT, IP_PORT 데이터셋 생성 -> new_data
+#    new_data = data['dstip']
+#    new_data = pd.DataFrame(new_data)
+#    IP = []
+#    PORT = []
+#    dst = []
+#    for i in range(len(new_data)):
+#        IP.append(new_data.iloc[i][0].split(':')[0])
+#        PORT.append(new_data.iloc[i][0].split(':')[1])
+#    
+#    IP = pd.DataFrame(IP, columns=['IP'])
+#    PORT = pd.DataFrame(PORT, columns=['PORT'])
+#    dst = data['dstip'].values.tolist()
+#    IP_PORT = pd.DataFrame(dst, columns=['IP_PORT'])
+#    
+#    new_data = pd.concat([data['TIME'], IP], axis=1)
+#    new_data = pd.concat([new_data, PORT], axis=1)
+#    new_data = pd.concat([new_data, IP_PORT], axis=1)
+#    
+#    return new_data
+
+
+    # SRC -> IP, PORT, IP_PORT 분리
+    SRC_IP = []
+    SRC_PORT =[]
+    SRC_IP_PORT =[]
     
-    IP = pd.DataFrame(IP, columns=['IP'])
-    PORT = pd.DataFrame(PORT, columns=['PORT'])
-    dst = data['dstip'].values.tolist()
-    IP_PORT = pd.DataFrame(dst, columns=['IP_PORT'])
+    for i in range(len(data)):
+        SRC_IP.append(data['srcip'][i].split(':')[0])
+        SRC_PORT.append(data['srcip'][i].split(':')[1])
+        SRC_IP_PORT.append(data['srcip'][i])
+        
+#    print(SRC_IP)
+#    print(SRC_PORT)
+#    print(SRC_IP_PORT)
     
-    new_data = pd.concat([data['TIME'], IP], axis=1)
-    new_data = pd.concat([new_data, PORT], axis=1)
-    new_data = pd.concat([new_data, IP_PORT], axis=1)
+    # DST -> IP, PORT, IP_PORT 분리
+    DST_IP = []
+    DST_PORT = []
+    DST_IP_PORT = []
+    for i in range(len(data)):
+        DST_IP.append(data['dstip'][i].split(':')[0])
+        DST_PORT.append(data['dstip'][i].split(':')[1])
+        DST_IP_PORT.append(data['dstip'][i])
+        
+    # merge new_data
+    new_data = pd.DataFrame({
+            'SRC_IP': SRC_IP,
+            'SRC_PORT': SRC_PORT,
+            'SRC_IP_PORT': SRC_IP_PORT,
+            'DST_IP': DST_IP,
+            'DST_PORT': DST_PORT,
+            'DST_IP_PORT': DST_IP_PORT,
+            })
     
     return new_data
 
+    
 
 if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코드 실행
     
@@ -45,65 +82,67 @@ if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코�
     
     # transform new_data
     new_data = make_new_data(data)
-    
+    print(type(new_data))
+    print(new_data)
     
     # timestamp에 각 초에 따른 데이터를 넣어줌
     timestamp_IP_PORT = []
-    for i in range((max(new_data['TIME'])+1)):
-        line = []
-        timestamp_IP_PORT.append(line)
+#    for i in range((max(new_data['TIME'])+1)):
+#        line = []
+#        timestamp_IP_PORT.append(line)
+#    
+#    for j in range(len(new_data['TIME'])):
+#        timestamp_IP_PORT[new_data['TIME'].iloc[j]].append(new_data['IP_PORT'].iloc[j])
+#    
+#    # timestamp를 이용해서 counter에 각 초당 IP&PORT 개수를 저장함
+#    counter_IP_PORT = []
+#    for k in range(len(timestamp_IP_PORT)):
+#        counter_IP_PORT.append(collections.Counter(timestamp_IP_PORT[k]))
+#    
+#    timestamp_IP = []
+#    
+#    # 초단위로 바꾼 값 중의 최대값 크기만큼의 (timestamp)리스트를 만듦
+#    for i in range((max(new_data['TIME']))+1):
+#        line = []
+#        timestamp_IP.append(line)
+#    
+#    
+#    
+#    # (timestamp)안에 각 초단위에 해당하는 dstip를 리스트형태로 넣음
+#    # 아래 코드 실행 후 timestamp[0:2] 로 출력하면 0초,1초에 대한 dstip 출력
+#    for j in range(len(new_data['TIME'])):
+#    
+#        timestamp_IP[new_data['TIME'].iloc[j]].append(new_data['IP'].iloc[j])
+#    # f.write(str(timestamp_IP)) 테스트
+#    
+#    
+#    # timestamp를 이용해서 counter에 각 초당 IP&PORT 개수를 저장함
+#    counter_IP = []
+#    for k in range(len(timestamp_IP)):
+#        counter_IP.append(collections.Counter(timestamp_IP[k]))
+#    
+#    timestamp_PORT = []
+#    # 초단위로 바꾼 값 중의 최대값 크기만큼의 (timestamp)리스트를 만듦
+#    for i in range((max(new_data['TIME']))+1):
+#        line = []
+#        timestamp_PORT.append(line)
+#    
+#    # (timestamp)안에 각 초단위에 해당하는 dstip를 리스트형태로 넣음
+#    # 아래 코드 실행 후 timestamp[0:2] 로 출력하면 0초,1초에 대한 dstip 출력
+#    for j in range(len(new_data['TIME'])):
+#        # print(data['time'].iloc[j])
+#        timestamp_PORT[new_data['TIME'].iloc[j]].append(new_data['PORT'].iloc[j])
+#    
+#    counter_PORT = []
+#    for k in range(len(timestamp_PORT)):
+#        counter_PORT.append(collections.Counter(timestamp_PORT[k]))
+#    
     
-    for j in range(len(new_data['TIME'])):
-        timestamp_IP_PORT[new_data['TIME'].iloc[j]].append(new_data['IP_PORT'].iloc[j])
+#    print("counter_IP_PORT")
+#    print (counter_IP_PORT)
     
-    # timestamp를 이용해서 counter에 각 초당 IP&PORT 개수를 저장함
-    counter_IP_PORT = []
-    for k in range(len(timestamp_IP_PORT)):
-        counter_IP_PORT.append(collections.Counter(timestamp_IP_PORT[k]))
-    
-    timestamp_IP = []
-    
-    # 초단위로 바꾼 값 중의 최대값 크기만큼의 (timestamp)리스트를 만듦
-    for i in range((max(new_data['TIME']))+1):
-        line = []
-        timestamp_IP.append(line)
+    # Feature_7 : Land
+    Land = Basic_Features.Land(new_data)
+    print("land : ", Land)
     
     
-    
-    # (timestamp)안에 각 초단위에 해당하는 dstip를 리스트형태로 넣음
-    # 아래 코드 실행 후 timestamp[0:2] 로 출력하면 0초,1초에 대한 dstip 출력
-    for j in range(len(new_data['TIME'])):
-    
-        timestamp_IP[new_data['TIME'].iloc[j]].append(new_data['IP'].iloc[j])
-    # f.write(str(timestamp_IP)) 테스트
-    
-    
-    # timestamp를 이용해서 counter에 각 초당 IP&PORT 개수를 저장함
-    counter_IP = []
-    for k in range(len(timestamp_IP)):
-        counter_IP.append(collections.Counter(timestamp_IP[k]))
-    
-    timestamp_PORT = []
-    # 초단위로 바꾼 값 중의 최대값 크기만큼의 (timestamp)리스트를 만듦
-    for i in range((max(new_data['TIME']))+1):
-        line = []
-        timestamp_PORT.append(line)
-    
-    # (timestamp)안에 각 초단위에 해당하는 dstip를 리스트형태로 넣음
-    # 아래 코드 실행 후 timestamp[0:2] 로 출력하면 0초,1초에 대한 dstip 출력
-    for j in range(len(new_data['TIME'])):
-        # print(data['time'].iloc[j])
-        timestamp_PORT[new_data['TIME'].iloc[j]].append(new_data['PORT'].iloc[j])
-    
-    counter_PORT = []
-    for k in range(len(timestamp_PORT)):
-        counter_PORT.append(collections.Counter(timestamp_PORT[k]))
-    
-    
-    print("counter_IP_PORT")
-    print (counter_IP_PORT)
-    
-    land = Basic_Features.test(new_data)
-    Basic_Features.test
-    print("land : ", land)
-    #print(Basic_Features.test(10,10))
