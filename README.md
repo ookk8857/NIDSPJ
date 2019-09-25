@@ -1,2 +1,0 @@
-# NIDSPJ
-NIDS
