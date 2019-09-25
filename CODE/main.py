@@ -13,30 +13,12 @@ from pandas import DataFrame as df
 
 
 def make_new_data(data):
-    data['time'] = data['time'].astype('float')
-    data['TIME'] = data['time'].astype('int')
     
-#    # IP, PORT, IP_PORT 데이터셋 생성 -> new_data
-#    new_data = data['dstip']
-#    new_data = pd.DataFrame(new_data)
-#    IP = []
-#    PORT = []
-#    dst = []
-#    for i in range(len(new_data)):
-#        IP.append(new_data.iloc[i][0].split(':')[0])
-#        PORT.append(new_data.iloc[i][0].split(':')[1])
-#    
-#    IP = pd.DataFrame(IP, columns=['IP'])
-#    PORT = pd.DataFrame(PORT, columns=['PORT'])
-#    dst = data['dstip'].values.tolist()
-#    IP_PORT = pd.DataFrame(dst, columns=['IP_PORT'])
-#    
-#    new_data = pd.concat([data['TIME'], IP], axis=1)
-#    new_data = pd.concat([new_data, PORT], axis=1)
-#    new_data = pd.concat([new_data, IP_PORT], axis=1)
-#    
-#    return new_data
-
+    # data['time'] -> object에서 float으로 변형, 초단위로 자름
+    data['TIME'] = data['time'].astype('float')
+    data['TIME_SEC'] = data['TIME'].astype('int')
+    
+    
 
     # SRC -> IP, PORT, IP_PORT 분리
     SRC_IP = []
@@ -48,32 +30,34 @@ def make_new_data(data):
         SRC_PORT.append(data['srcip'][i].split(':')[1])
         SRC_IP_PORT.append(data['srcip'][i])
         
-#    print(SRC_IP)
-#    print(SRC_PORT)
-#    print(SRC_IP_PORT)
-    
+        
+        
     # DST -> IP, PORT, IP_PORT 분리
     DST_IP = []
     DST_PORT = []
     DST_IP_PORT = []
+    
     for i in range(len(data)):
         DST_IP.append(data['dstip'][i].split(':')[0])
         DST_PORT.append(data['dstip'][i].split(':')[1])
         DST_IP_PORT.append(data['dstip'][i])
         
+        
+        
     # merge new_data
     new_data = pd.DataFrame({
-            'SRC_IP': SRC_IP,
-            'SRC_PORT': SRC_PORT,
-            'SRC_IP_PORT': SRC_IP_PORT,
-            'DST_IP': DST_IP,
-            'DST_PORT': DST_PORT,
-            'DST_IP_PORT': DST_IP_PORT,
+            'TIME' : data['TIME'],          # object에서 float으로 변형된 시간 값
+            'TIME_SEC' : data['TIME_SEC'],  # TIME을 초단위로 바꿈
+            'SRC_IP': SRC_IP,               # 출발지 IP
+            'SRC_PORT': SRC_PORT,           # 출발지 PORT
+            'SRC_IP_PORT': SRC_IP_PORT,     # 출발지 IP:PORT
+            'DST_IP': DST_IP,               # 도착지 IP
+            'DST_PORT': DST_PORT,           # 도착지 PORT
+            'DST_IP_PORT': DST_IP_PORT,     # 도착지 IP:PORT
             })
     
     return new_data
 
-    
 
 if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코드 실행
     
@@ -82,11 +66,9 @@ if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코�
     
     # transform new_data
     new_data = make_new_data(data)
-    print(type(new_data))
-    print(new_data)
     
     # timestamp에 각 초에 따른 데이터를 넣어줌
-    timestamp_IP_PORT = []
+#    timestamp_IP_PORT = []
 #    for i in range((max(new_data['TIME'])+1)):
 #        line = []
 #        timestamp_IP_PORT.append(line)
@@ -141,8 +123,24 @@ if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코�
 #    print("counter_IP_PORT")
 #    print (counter_IP_PORT)
     
+    """
+    구현해야 할 Features
+    """
+    
+    # Feature_1
+    # Featrue_2
+    # Feature_3
+    # Feature_4
+    # Feature_5
+    # Feature_6
+    
     # Feature_7 : Land
     Land = Basic_Features.Land(new_data)
     print("land : ", Land)
     
+    # Feature_8
+    # Feature_9
+    # Feature_10
+    # Featrue_11
+    # Feature_12
     
