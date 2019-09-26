@@ -38,13 +38,16 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
 
     fh_csv is the csv file handle
     """
+
     ether_pkt_sc = Ether(pkt_sc)
-    if ether_pkt_sc.type != 0x800:
+    version = ether_pkt_sc.type
+    if ether_pkt_sc.type != 0x800: #IPv4
         print('Ignoring non-IP packet')
         return False
 
     ip_pkt_sc = ether_pkt_sc[IP]       # <<<< Assuming Ethernet + IPv4 here
     proto = ip_pkt_sc.fields['proto']
+    totallength = ip_pkt_sc.len
     if proto == 17:
         udp_pkt_sc = ip_pkt_sc[UDP]
         l4_payload_bytes = bytes(udp_pkt_sc.payload)
@@ -63,7 +66,7 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
         return False
 
     # Each line of the CSV has this format
-    fmt = '{0}|{1}|{2}({3})|{4}|{5}:{6}|{7}:{8}|{9}|{10}'
+    fmt = '{0}|{1}|{2}({3})|{4}|{5}:{6}|{7}:{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}'
     #       |   |   |   |    |   |   |   |   |   |   |
     #       |   |   |   |    |   |   |   |   |   |   o-> {10} L4 payload hexdump
     #       |   |   |   |    |   |   |   |   |   o-----> {9}  total pkt length
@@ -79,7 +82,6 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
 
     # Example:
     # 1|0.0|DNS(UDP)|Standard query 0xf3de A www.cisco.com|192.168.1.116:57922|1.1.1.1:53|73|f3de010000010000000000000377777705636973636f03636f6d0000010001
-
     print(fmt.format(pkt_sh.no,               # {0}
                      pkt_sh.time,             # {1}
                      pkt_sh.protocol,         # {2}
@@ -89,8 +91,13 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
                      l4_sport,                # {6}
                      pkt_sh.destination,      # {7}
                      l4_dport,                # {8}
-                     pkt_sh.length,           # {9}
-                     l4_payload_bytes.hex()), # {10}
+                     version,                 # {9}
+                     totallength,
+                     ip_pkt_sc.id,
+                     ip_pkt_sc.flags,
+                     ip_pkt_sc.ttl,
+                     pkt_sh.length,# {9}
+                     l4_payload_bytes.hex()),# {10}
           file=fh_csv)
 
     return True
@@ -170,7 +177,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-# 이주현!
-# 김지혜!
-# 이세은!
-# 나예원!89
+# 이주현
