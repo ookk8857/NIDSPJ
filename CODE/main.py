@@ -54,6 +54,7 @@ def make_new_data(data):
             'DST_IP': DST_IP,               # 도착지 IP
             'DST_PORT': DST_PORT,           # 도착지 PORT
             'DST_IP_PORT': DST_IP_PORT,     # 도착지 IP:PORT
+            'PROTOCOL': data['protocol']
             })
     
     return new_data
@@ -128,7 +129,14 @@ if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코�
     """
     
     # Feature_1
+    
+    
+    
     # Featrue_2
+    Protocol_type = Basic_Features.Protocol_type(new_data)
+    print("Protocol_type : ", Protocol_type)
+    
+    
     # Feature_3
     # Feature_4
     # Feature_5
