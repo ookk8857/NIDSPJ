@@ -38,15 +38,18 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
 
     fh_csv is the csv file handle
     """
+
     ether_pkt_sc = Ether(pkt_sc)
-    if ether_pkt_sc.type != 0x800:
+    if ether_pkt_sc.type != 0x800: #IPv4
         print('Ignoring non-IP packet')
         return False
-
     ip_pkt_sc = ether_pkt_sc[IP]       # <<<< Assuming Ethernet + IPv4 here
     proto = ip_pkt_sc.fields['proto']
+    ip_pkt_header_len = ip_pkt_sc.ihl * 4
+    totallength = ip_pkt_sc.len
     if proto == 17:
         udp_pkt_sc = ip_pkt_sc[UDP]
+        version = ether_pkt_sc.version
         l4_payload_bytes = bytes(udp_pkt_sc.payload)
         l4_proto_name = 'UDP'
         l4_sport = udp_pkt_sc.sport
@@ -55,6 +58,7 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
         tcp_pkt_sc = ip_pkt_sc[TCP]
         l4_payload_bytes = bytes(tcp_pkt_sc.payload)
         l4_proto_name = 'TCP'
+        version = ether_pkt_sc.version
         l4_sport = tcp_pkt_sc.sport
         l4_dport = tcp_pkt_sc.dport
     else:
@@ -63,7 +67,7 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
         return False
 
     # Each line of the CSV has this format
-    fmt = '{0}|{1}|{2}({3})|{4}|{5}:{6}|{7}:{8}|{9}|{10}'
+    fmt = '{0}|{1}|{2}({3})|{4}|{5}:{6}|{7}:{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}|{16}{17}'
     #       |   |   |   |    |   |   |   |   |   |   |
     #       |   |   |   |    |   |   |   |   |   |   o-> {10} L4 payload hexdump
     #       |   |   |   |    |   |   |   |   |   o-----> {9}  total pkt length
@@ -79,18 +83,24 @@ def render_csv_row(pkt_sh, pkt_sc, fh_csv):
 
     # Example:
     # 1|0.0|DNS(UDP)|Standard query 0xf3de A www.cisco.com|192.168.1.116:57922|1.1.1.1:53|73|f3de010000010000000000000377777705636973636f03636f6d0000010001
-
-    print(fmt.format(pkt_sh.no,               # {0}
-                     pkt_sh.time,             # {1}
-                     pkt_sh.protocol,         # {2}
-                     l4_proto_name,           # {3}
-                     pkt_sh.info,             # {4}
-                     pkt_sh.source,           # {5}
-                     l4_sport,                # {6}
-                     pkt_sh.destination,      # {7}
-                     l4_dport,                # {8}
-                     pkt_sh.length,           # {9}
-                     l4_payload_bytes.hex()), # {10}
+    print(fmt.format(pkt_sh.no,               # {0} num
+                     pkt_sh.time,             # {1} time
+                     pkt_sh.protocol,         # {2} protocol
+                     l4_proto_name,           # {3} IP header - protoname
+                     pkt_sh.info,             # {4} info
+                     pkt_sh.source,           # {5} Source IP
+                     l4_sport,                # {6} Source Port
+                     pkt_sh.destination,      # {7} Destination IP
+                     l4_dport,                # {8} Destination Port
+                     version,                 # {9} Version
+                     totallength,             # {10} IP header - totallength
+                     ip_pkt_sc.id,            # {11} IP header - Identification
+                     ip_pkt_sc.flags,         # {12} IP header - Flags(DF->hex로 고치기)
+                     ip_pkt_sc.ttl,           # {13} IP header - Time to live
+                     pkt_sh.length,           # {14} Frame - captured bytes
+                     ip_pkt_header_len,       # {15} IP header - Header Length
+                     ip_pkt_sc.chksum,        # {16} IP header - Header checksum
+                     l4_payload_bytes.hex()), # {17} Payload
           file=fh_csv)
 
     return True
@@ -170,7 +180,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-# 이주현!
-# 김지혜!
-# 이세은!
-# 나예원!89

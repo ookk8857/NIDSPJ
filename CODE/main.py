@@ -63,7 +63,7 @@ def make_new_data(data):
 if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코드 실행
     
     # import data
-    data = pd.read_csv("../dataset/test_younggil.csv", sep='|', dtype='unicode', names=['no', 'time', 'protocol', 'text description', 'srcip', 'dstip', 'total pkt length', 'L4 payload hexdump'])  # 'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
+    data = pd.read_csv("../dataset/test_younggil.csv", sep='|', dtype='unicode', names=['no', 'time', 'protocol', 'text description', 'srcip', 'dstip', 'ver.', 'totallength', 'IP id', 'IP Flags','TTL','URG on','total pkt length', 'L4 payload hexdump'])  # 'no','time','highest protocol(L4 protocol)','text description','srcipaddress:srcport','dst ip address:dst port','total pkt length','L4 payload hexdump')
     
     # transform new_data
     new_data = make_new_data(data)
@@ -148,6 +148,10 @@ if __name__ == '__main__':    # 프로그램의 시작점일 때만 아래 코�
     
     # Feature_8
     # Feature_9
+    Urgent = Basic_Features.Urgent(new_data, data)
+    print("Urgent : ", Urgent)
+
+
     # Feature_10
     # Featrue_11
     # Feature_12
