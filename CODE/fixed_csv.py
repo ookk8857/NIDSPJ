@@ -4,10 +4,10 @@ Created on Sat Oct 19 15:35:58 2019
 
 @author: KJH
 """
-
 def fixed_csv(path):
     count = 0
     train_path, train_dirs, train_files = next(os.walk(path))
+    train_files.sort()
     for i in range(len(train_files)):
         if "csv" in train_files[i]:
             if "fixed" not in train_files[i]:
@@ -42,4 +42,9 @@ def fixed_csv(path):
         else:
             print(train_files[i],"is not csv_file")
     print("##### End #####  ->", count ,"files fixed")
-
+    
+# train_set1_path, train_set2_path
+# ts = time.time()
+# fixed_csv(train_set1_path)
+# fixed_csv(train_set2_path)
+# print(time.time() - ts)
